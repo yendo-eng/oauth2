@@ -84,6 +84,17 @@ func (c *Config) TokenSource(ctx context.Context) oauth2.TokenSource {
 	return oauth2.ReuseTokenSource(nil, source)
 }
 
+// UncachedTokenSource returns a simple TokenSource that always requests a new
+// Token.  This is useful for providing your own caching strategies on top of
+// it.
+func (c *Config) UncachedTokenSource(ctx context.Context) oauth2.TokenSource {
+	source := &tokenSource{
+		ctx:  ctx,
+		conf: c,
+	}
+	return source
+}
+
 type tokenSource struct {
 	ctx  context.Context
 	conf *Config
